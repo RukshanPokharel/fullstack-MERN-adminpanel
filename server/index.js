@@ -54,7 +54,4 @@ mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopol
     // OverallStat.insertMany(dataOverallStat);
     // AffiliateStat.insertMany(dataAffiliateStat);
 
-
-
-
 }).catch((error) => { console.log(`${error} did not connect`) })
