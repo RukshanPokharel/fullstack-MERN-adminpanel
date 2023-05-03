@@ -6,6 +6,9 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import helmet from 'helmet';
 
+import path from "path";
+import { fileURLToPath } from 'url';
+
 // import datas
 import User from "./models/User.js";
 import Product from './models/Product.js';
@@ -21,8 +24,12 @@ import clientRoutes from "./routes/client.js";
 import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
 import salesRoutes from "./routes/sales.js";
+import authRoutes from "./routes/auth.js";
 
 // CONFIGURATION
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 dotenv.config(); // for setting up environment variables
 
 // setting up express and middlewares
@@ -31,15 +38,19 @@ app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
+
+app.use("/assets", express.static(path.join(__dirname, 'public/assets')));
 
 // setting up ROUTES
 app.use("/client", clientRoutes);
 app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
+app.use("/auth", authRoutes);
 
 // MONGOOSE SETUP
 const PORT = process.env.PORT || 9000;
